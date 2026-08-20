@@ -1,0 +1,26 @@
+# Secrets — NIEMALS committen (.env enthält OAuth-Token, API-Keys)
+.env
+.env.*
+!.env.example
+
+# Laufzeit-Daten
+node_modules/
+_tickets/
+*.log
+.DS_Store
+
+# Generierte Artefakte (groß, reproduzierbar)
+output/
+public/uploads/
+
+# Playwright/QA-Artefakte
+test-results/
+playwright-report/
+
+# Brainstorming-Artefakte (Visual Companion)
+.superpowers/
+
+# Projekt-Output & lokale Daten
+projects/
+scratch/
+data/
