@@ -57,10 +57,13 @@ npm start              # Dashboard auf http://localhost:3000
 ## Struktur
 
 ```
-├── server.js            Express-Dashboard + API
+├── server.js            Express-Dashboard + API (nimmt Anfragen an)
+├── pipeline/build-site.js  Der komplette Bauweg von Projektdaten zur Website
+├── scraper/             Low-Level-Extraktion aus fremdem HTML
+├── lib/                 Geteilte Bausteine (slugify, config)
 ├── agent-*.js           Leads, Scraper, Visuals, Sales
 ├── design-dna.js        Branchen-Designsysteme
-├── generator.js         Orchestrierung der Site-Generierung
+├── generator.js         Startseiten-Generierung
 ├── blocks/ · pages.js   Seiten-Blöcke und Unterseiten
 ├── assets-*.js          Fonts, Icons, Fotos, Hero
 ├── a11y.js · cwv.js …   QA-Gates
