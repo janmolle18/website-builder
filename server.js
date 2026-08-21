@@ -17,8 +17,8 @@ const { runQA } = require('./qa-agent');
 const { findLeads, loadLeads, saveLeads } = require('./agent-leads');
 const { contactLead, updateLeadStatus, getPipelineStats, generateSalesMail } = require('./agent-sales');
 const { scrapeRestaurant } = require('./agent-scraper');
-const { syncLeadToNotion, updateNotionStatus } = require('./agent-notion');
 const { applySEO, writeSeoFiles, writeDiscoveryFiles, resolveBaseUrl } = require('./seo');
+const { slugify } = require('./lib/slugify');
 const { writeLegalPages, injectLegalLinks } = require('./legal');
 const { applyAnalytics } = require('./analytics');
 const { downloadTeamPhotos, buildSubpages, planSubpages, applyTeamPhotos, fixTeamProfileLinks, applyRechtsgebiete, applyHomepageNav } = require('./pages');
@@ -94,12 +94,8 @@ async function buildPremiumSite(project, projectDir, opts = {}) {
   // Mehrseitig je nach Projektgröße: Unterseiten-Plan + Team-Fotos lokal laden,
   // damit die Startseite die echten Fotos einbinden und auf die Unterseiten verlinken kann.
   // Team-Slugs sicherstellen (Scrape liefert teils nur {name, role} ohne slug → sonst anwaelte/undefined.html).
-  const slugifyName = (s) => String(s || '').toLowerCase()
-    .replace(/[äöüß]/g, c => ({ ä: 'ae', ö: 'oe', ü: 'ue', ß: 'ss' }[c]))
-    .normalize('NFKD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
   project.team = (project.team || []).map((t, i) =>
-    (t && t.name) ? { ...t, slug: t.slug || slugifyName(t.name) || `anwalt-${i + 1}` } : t);
+    (t && t.name) ? { ...t, slug: t.slug || slugify(t.name) || `anwalt-${i + 1}` } : t);
 
   const navLinks = planSubpages(project);
   if ((project.team || []).length) {

@@ -108,7 +108,7 @@ async function auditProspect(lead = {}) {
       pitchHook: 'Website ist aktuell nicht erreichbar', unverified: true };
   }
 
-  const { hits, placeholder, textLen } = inspectHtml(res.html);
+  const { hits, placeholder } = inspectHtml(res.html);
   const evidence = [];
   let score = 0;
 

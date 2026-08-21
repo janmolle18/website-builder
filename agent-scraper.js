@@ -16,6 +16,7 @@ const os = require('os');
 const { callClaude, callClaudeVision } = require('./claude-cli');
 const { buildInventory, classifyInventory, fetchPage } = require('./site-inventory');
 const { buildScrapeReport, verifyTeamCompleteness } = require('./scrape-report');
+const { slugify, slugFromUrl } = require('./lib/slugify');
 
 const UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15';
 
@@ -699,13 +700,7 @@ async function scrapeExtraSections(baseUrl) {
 
 const PERSON_NAV = /^(index|die-kanzlei|kanzlei|rechtsanwaelte|rechtsgebiete|sekretariat|kontakt|impressum|datenschutz|home|ueber-uns|about|news|aktuelles|links)\b/i;
 
-/** slug aus URL: letztes nicht-leeres Pfadsegment ohne .html (für /pfad/<slug>/ UND <slug>.html). */
-function slugFromUrl(u) {
-  try {
-    const segs = new URL(u).pathname.split('/').filter(Boolean);
-    return (segs.pop() || '').replace(/\.html?$/i, '').toLowerCase();
-  } catch { return ''; }
-}
+// slugFromUrl kommt aus lib/slugify (gemeinsamer Kern, wird unten re-exportiert).
 
 /**
  * Findet Personen-Profil-Links auf einer Übersichtsseite — verzeichnis- (/bereich/<slug>/)
@@ -793,12 +788,7 @@ function normalizePersonName(name) {
 
 /** Personenname → URL-tauglicher Slug (für team[]-Einträge ohne eigene Seite). */
 function nameToSlug(name) {
-  return String(name || '')
-    .toLowerCase()
-    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+  return slugify(name);
 }
 
 /**
@@ -935,7 +925,7 @@ function extractReadableText(html, dropChrome) {
   scope.find('p, div, tr, li, h1, h2, h3, h4, h5, h6').each((i, el) => $(el).append('\n'));
   return scope.text()
     .replace(/\r/g, '')
-    .replace(/[ \t ]+/g, ' ')
+    .replace(/[ \t\u00A0]+/g, ' ')
     .split('\n').map(l => l.trim()).join('\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim()
@@ -1041,7 +1031,6 @@ async function scrapeGoogleMaps(mapsUrl, opts = {}) {
   // Place ID aus URL extrahieren
   let placeId = null;
   const cidMatch = mapsUrl.match(/[?&]cid=(\d+)/);
-  const placeMatch = mapsUrl.match(/place\/[^/]+\/([^/?\s]+)/);
 
   if (!apiKey) {
     // Ohne API Key: Claude analysiert die URL und gibt Basis-Infos zurück
@@ -1189,12 +1178,12 @@ function extractPhone($, html) {
   const telLink = $('a[href^="tel:"]').first().attr('href');
   if (telLink) return telLink.replace('tel:', '').trim();
   // Regex in HTML
-  const match = html.match(/(\+49|0\d{2,5})[\s\-\/]?\d{3,5}[\s\-\/]?\d{3,8}/);
+  const match = html.match(/(\+49|0\d{2,5})[\s\-/]?\d{3,5}[\s\-/]?\d{3,8}/);
   return match ? match[0].trim() : '';
 }
 
 function extractEmail(html) {
-  const match = html.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
+  const match = html.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
   return match ? match[0] : '';
 }
 
@@ -1204,7 +1193,7 @@ function extractAddress($, html) {
     $('[itemprop="address"]').text();
   if (schema) return schema.trim();
   // Regex für deutsche Adressen
-  const match = html.match(/[A-ZÄÖÜ][a-zäöüß\s\-]+(?:straße|str\.|gasse|weg|allee|platz|ring)\s+\d+[a-z]?,?\s*\d{5}\s+[A-ZÄÖÜ][a-zäöüß]+/i);
+  const match = html.match(/[A-ZÄÖÜ][a-zäöüß\s-]+(?:straße|str\.|gasse|weg|allee|platz|ring)\s+\d+[a-z]?,?\s*\d{5}\s+[A-ZÄÖÜ][a-zäöüß]+/i);
   return match ? match[0].trim() : '';
 }
 
@@ -1241,12 +1230,11 @@ function extractImages($, baseUrl) {
 }
 
 function extractMenu($, html) {
-  const menuItems = [];
   // Preise finden
-  const priceMatches = html.match(/([A-ZÄÖÜ][a-zäöüß\s]+)\s*[\|–\-]\s*(\d+[,\.]\d{2})\s*€/g);
+  const priceMatches = html.match(/([A-ZÄÖÜ][a-zäöüß\s]+)\s*[|–-]\s*(\d+[,.]\d{2})\s*€/g);
   if (priceMatches && priceMatches.length > 3) {
     return priceMatches.slice(0, 20).map(m => {
-      const parts = m.split(/[\|–\-]/);
+      const parts = m.split(/[|–-]/);
       return { name: parts[0]?.trim(), price: parts[1]?.trim() };
     });
   }

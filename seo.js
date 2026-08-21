@@ -121,7 +121,7 @@ function parseOpeningHours(hoursText = '') {
     if (/geschlossen|closed|ruhetag/i.test(line)) continue;
 
     // Tag(e) am Zeilenanfang isolieren: "Di–Fr 9–18" oder "Montag: 11:00–14:00, 17:00–22:00"
-    const dayPart = line.match(/^([A-Za-zÄÖÜäöü.\-–—\s\/]+?)[:\s]/);
+    const dayPart = line.match(/^([A-Za-zÄÖÜäöü.\-–—\s/]+?)[:\s]/);
     if (!dayPart) continue;
     const days = expandDays(dayPart[1]);
     if (!days.length) continue;
@@ -309,7 +309,7 @@ function buildJsonLd(project, baseUrl, meta) {
   if (FOOD_TYPES.has(type)) {
     if (project.cuisine) node.servesCuisine = project.cuisine;
     if (Array.isArray(project.menu) && project.menu.length) node.hasMenu = baseUrl.replace(/\/$/, '/') + '#menu';
-    if (type !== 'Restaurant') node.servesCuisine = node.servesCuisine; // no-op, Klarheit
+    // servesCuisine gilt bewusst für ALLE Food-Typen (auch Cafe/Bar, nicht nur Restaurant).
   }
 
   // Dienstleister-Felder (branchenübergreifend) — wichtig für Kanzlei/Praxis/Handwerk:

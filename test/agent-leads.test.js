@@ -2,7 +2,7 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 
 const {
-  VERTICALS, ALL_VERTICALS, normalizeVerticals, buildOverpassQuery,
+  ALL_VERTICALS, normalizeVerticals, buildOverpassQuery,
   categoryOf, verticalOf, osmToBusiness, elementsToBusinesses, toLead, findLeads
 } = require('../agent-leads');
 

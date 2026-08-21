@@ -40,7 +40,8 @@ function findHtmlFiles(dir, base = dir, out = []) {
 
 /**
  * Extrahiert das `tailwind.config = {...}`-Objekt aus dem HTML (inline <script>).
- * Läuft auf UNSEREM eigenen generierten HTML (vertrauenswürdig) → Function-Eval ok.
+ * Vertrauensgrenze: nur auf selbst generiertes HTML anwenden, niemals auf
+ * gescrapte Fremdinhalte — das Function()-Eval führt den Ausdruck aus.
  * @returns {object|null} das Config-Objekt (z. B. { theme: { extend: {...} } }) oder null
  */
 function extractTailwindConfig(html) {
@@ -51,7 +52,6 @@ function extractTailwindConfig(html) {
     if (!/tailwind\.config\s*=/.test(txt)) return;
     const expr = txt.replace(/^[\s\S]*?tailwind\.config\s*=\s*/, '').replace(/;?\s*$/, '');
     try {
-      // eslint-disable-next-line no-new-func
       cfg = Function(`"use strict";return (${expr})`)();
     } catch { cfg = null; }
   });

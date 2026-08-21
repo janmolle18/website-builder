@@ -302,4 +302,4 @@ Micro-Details (alle drei einbauen — das sind die "gestohlenen" Referenz-Detail
 ${dna.microDetails.map((m, i) => `${i + 1}. ${m}`).join('\n')}${dna.variant ? `\n\nLAYOUT-VARIANTE (verbindlich — macht GENAU DIESE Seite einzigartig, nicht das Standard-Schema): ${dna.variant.prompt}` : ''}`;
 }
 
-module.exports = { DNA, selectDNA, detectBranch, dnaToPrompt, pickVariant, LAYOUT_VARIANTS };
+module.exports = { selectDNA, dnaToPrompt, pickVariant, LAYOUT_VARIANTS };

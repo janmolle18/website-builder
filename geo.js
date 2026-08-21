@@ -74,10 +74,10 @@ const BUSINESS_TYPES = [
 /**
  * Analysiert die GEO-Reife eines gebauten Projekts.
  * @param {string} projectDir absoluter Pfad zum Projektordner
- * @param {object} [project] optionale project.json (für Kontext, nicht zwingend)
+ * @param {object} [_project] optionale project.json (für Kontext, aktuell ungenutzt)
  * @returns {{score:number, grade:string, checks:{key,label,weight,pass,detail}[], summary:string, missing:string[]}}
  */
-function analyzeGeo(projectDir, project = {}) {
+function analyzeGeo(projectDir, _project = {}) {
   const html = readSafe(path.join(projectDir, 'index.html'));
   if (!html) {
     return { score: 0, grade: 'n/a', checks: [], summary: 'Keine index.html — Site noch nicht gebaut.', missing: ['Site bauen'] };

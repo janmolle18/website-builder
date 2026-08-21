@@ -162,4 +162,4 @@ function parseReport(text) {
   }
 }
 
-module.exports = { runQA, takeScreenshots };
+module.exports = { runQA };

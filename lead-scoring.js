@@ -10,6 +10,8 @@
  * Dieses Modul ist pur (kein fs/Netz). I/O kommt injiziert über qualifyLead-Deps.
  */
 
+const { normalizeForMatch } = require('./lib/slugify');
+
 const BUCKET = {
   KEINE_WEBSITE: 'keine-website',
   WEBSITE_SCHLECHT: 'website-schlecht',
@@ -108,13 +110,9 @@ const NAME_STOPWORDS = new Set([
   'imbiss', 'grill', 'bar', 'hotel', 'baeckerei', 'konditorei'
 ]);
 
+/** Vergleichsform für Namens-Matching (gemeinsamer Kern in lib/slugify). */
 function normalizeName(s) {
-  return String(s || '')
-    .toLowerCase()
-    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim();
+  return normalizeForMatch(s);
 }
 
 function nameTokens(s) {

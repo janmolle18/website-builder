@@ -20,6 +20,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const { applyPolish } = require('./polish');
 const { jsonLdSafe } = require('./seo'); // </script>-sichere Serialisierung für <script>-Embeds
+const { slugify } = require('./lib/slugify');
 
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15';
 
@@ -360,9 +361,7 @@ function renderProfile(project, dna, t) {
 
 /** Slug für Rechtsgebiet-Namen ("Vertrags- & Werkvertragsrecht" → "vertrags-werkvertragsrecht"). */
 function rgSlug(s) {
-  return String(s || '').toLowerCase()
-    .replace(/[äöüß]/g, c => ({ ä: 'ae', ö: 'oe', ü: 'ue', ß: 'ss' }[c]))
-    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return slugify(s);
 }
 
 /** Generische Info-Unterseite (Notare, Über-uns, Service, Aktuelles): Text + Unterabschnitte. */

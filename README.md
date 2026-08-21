@@ -24,7 +24,7 @@ graph LR
 6. **QA-Gates** (`a11y.js`, `cwv.js`, `image-qa.js`, `qa-agent.js`, `polish.js`, `comparison.js`) — automatische Prüfungen für Barrierefreiheit, Core Web Vitals, Bildqualität und Vorher/Nachher-Vergleich gegen die Bestandsseite.
 7. **SEO & GEO** (`seo.js`, `geo.js`, `person-schema.js`) — Entity-SEO, LocalBusiness/Person-Schema, `llms.txt`, Sitemap, GEO-Report für KI-Suche.
 8. **Auslieferung** (`deploy.js`, `export-zip.js`, `self-hosting.js`) — Ein-Klick-Deploy (Vercel) oder ZIP-Paket für klassisches Shared Hosting (inkl. `.htaccess`), mit gehärtetem Deploy-Ignore.
-9. **Betrieb** (`server.js`, `analytics.js`, `tickets.js`, `agent-notion.js`, `pipeline-sync.js`) — Express-Dashboard für den gesamten Ablauf, Privacy-freundliche Analytics, Ticket-Benachrichtigungen und Lead-Sync nach Notion bzw. in eine Markdown-Pipeline.
+9. **Betrieb** (`server.js`, `analytics.js`, `tickets.js`, `pipeline-sync.js`) — Express-Dashboard für den gesamten Ablauf, Privacy-freundliche Analytics, Ticket-Benachrichtigungen und Lead-Sync in eine Markdown-Pipeline.
 10. **LLM-Integration** (`claude-cli.js`) — Text-/Content-Schritte laufen über die Claude-CLI mit Retry-Logik für transiente Fehler; alles andere ist deterministisch und LLM-frei.
 
 ## Tests
@@ -51,7 +51,6 @@ npm start              # Dashboard auf http://localhost:3000
 |---|---|
 | `CLAUDE_CODE_OAUTH_TOKEN` | Content-Generierung über die Claude-CLI |
 | `GOOGLE_PLACES_API_KEY` | Lead-Abgleich mit Google Places |
-| `NOTION_TOKEN` / `NOTION_DB_ID` | Lead-Sync nach Notion (optional) |
 | `VERCEL_TOKEN` | Ein-Klick-Deploy (optional, sonst `vercel login`) |
 | `SMTP_*` | Ticket-Benachrichtigungen (optional) |
 
@@ -59,7 +58,7 @@ npm start              # Dashboard auf http://localhost:3000
 
 ```
 ├── server.js            Express-Dashboard + API
-├── agent-*.js           Leads, Scraper, Visuals, Sales, Notion
+├── agent-*.js           Leads, Scraper, Visuals, Sales
 ├── design-dna.js        Branchen-Designsysteme
 ├── generator.js         Orchestrierung der Site-Generierung
 ├── blocks/ · pages.js   Seiten-Blöcke und Unterseiten

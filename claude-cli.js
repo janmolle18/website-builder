@@ -218,4 +218,4 @@ async function callClaudeVision({ system, prompt, imagePaths = [], model, addDir
   return runWithRetry(args, readInstr + prompt, { timeout });
 }
 
-module.exports = { callClaude, callClaudeVision, resolveModel, isTransient };
+module.exports = { callClaude, callClaudeVision, isTransient };

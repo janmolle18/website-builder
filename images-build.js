@@ -131,7 +131,7 @@ async function convertOne(masterPath) {
       saved: Math.max(0, master - largestAvif),
     };
   } catch (e) {
-    for (const p of written) { try { fs.rmSync(p, { force: true }); } catch {} }
+    for (const p of written) { try { fs.rmSync(p, { force: true }); } catch { /* Best-Effort-Aufräumen — Fehler hier bewusst ignorieren */ } }
     console.warn(`⚠️ Bild-Konvertierung übersprungen (${path.basename(masterPath)}): ${e.message}`);
     return { ok: false };
   }

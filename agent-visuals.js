@@ -201,4 +201,4 @@ async function generateHeroVideoLoop(sourceImage, project, projectDir, dna) {
   throw new Error('Kling-Task Timeout nach 10 Minuten');
 }
 
-module.exports = { prepareHeroVisual, pickHeroPhoto, generateHeroImage, generateHeroVideoLoop };
+module.exports = { prepareHeroVisual };

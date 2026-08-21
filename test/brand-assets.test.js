@@ -12,7 +12,7 @@ function site(extraPages = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'brand-'));
   const head = '<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>T</title></head>';
   fs.writeFileSync(path.join(dir, 'index.html'), `<!doctype html><html lang="de">${head}<body><h1>Start</h1></body></html>`);
-  for (const [rel, _] of Object.entries(extraPages)) {
+  for (const rel of Object.keys(extraPages)) {
     const p = path.join(dir, rel);
     fs.mkdirSync(path.dirname(p), { recursive: true });
     fs.writeFileSync(p, `<!doctype html><html lang="de">${head}<body><h1>${rel}</h1></body></html>`);

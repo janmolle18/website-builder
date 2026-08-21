@@ -5,8 +5,7 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const { callClaude } = require('./claude-cli');
 const { auditProspect } = require('./prospect-audit');
-const { applyScoring, qualifyLead } = require('./lead-scoring');
-const { lookupPlace } = require('./places-lead-check');
+const { applyScoring } = require('./lead-scoring');
 
 const LEADS_FILE = path.join(__dirname, 'projects', 'leads.json');
 

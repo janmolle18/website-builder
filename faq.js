@@ -109,7 +109,6 @@ function injectFaq(html, project, dna) {
   if (!faq.length) return { html, injected: false };
 
   const $ = cheerio.load(html, { decodeEntities: false });
-  let changed = false;
 
   // Sektion vor dem Footer einsetzen — nur wenn noch keine vorhanden ist.
   if (!$('[data-faq]').length) {
@@ -118,7 +117,6 @@ function injectFaq(html, project, dna) {
     if (footer.length) footer.before(section);
     else if ($('main').length) $('main').first().append(section);
     else $('body').append(section);
-    changed = true;
   }
 
   // FAQPage-Schema IMMER sicherstellen (idempotent): vorhandenes FAQPage-Script

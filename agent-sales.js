@@ -26,11 +26,7 @@ function createTransport() {
 // ── Mail-Generator via Claude ─────────────────────────────────────────────────
 
 async function generateSalesMail(lead, websiteUrl = null) {
-  const hasWebsite = !!lead.website;
   const websiteIssues = lead.websiteIssues || 'keine Website';
-  const previewSection = websiteUrl
-    ? `\n\nIch habe bereits eine kostenlose Demo-Website für ${lead.name} erstellt: ${websiteUrl}\nDiese können Sie unter dem Link unverbindlich ansehen.`
-    : '';
 
   const prompt = `Du bist ein professioneller Website-Verkäufer aus Paderborn. Schreibe eine kurze, persönliche Kaltakquise-E-Mail an den Inhaber von "${lead.name}".
 

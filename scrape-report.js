@@ -9,20 +9,13 @@
 
 require('dotenv').config();
 const { callClaude } = require('./claude-cli');
+// slug aus URL/Pfad: gemeinsamer Kern in lib/slugify (früher lokale Kopie wegen Import-Zyklus).
+const { slugFromUrl: slugFromPath } = require('./lib/slugify');
 
 const DEFAULT_MIN_COVERAGE = 60; // % — überschreibbar via env SCRAPE_MIN_COVERAGE
 
 // Seitentypen, die inhaltlich auf der neuen Site landen sollten
 const CONTENT_TYPES = ['team-overview', 'team-profile', 'practice-area-overview', 'practice-area', 'about', 'news', 'service'];
-
-/** slug = letztes Pfadsegment ohne .html (lokale Kopie — kein Import aus agent-scraper, sonst Zyklus). */
-function slugFromPath(urlOrPath) {
-  try {
-    const p = urlOrPath.includes('://') ? new URL(urlOrPath).pathname : urlOrPath;
-    const segs = p.split('/').filter(Boolean);
-    return (segs.pop() || '').replace(/\.html?$/i, '').toLowerCase();
-  } catch { return ''; }
-}
 
 /** Namen für Vergleiche normalisieren: Titel/Anreden raus, Kleinbuchstaben, Umlaute vereinheitlicht. */
 function normalizeName(name) {
